@@ -48,5 +48,8 @@
             "@phpstan -q",
             "@testSilent"
         ]
+    },
+    "archive": {
+        "exclude": ["/test/", "phpcs.xml.dist", "phpstan.dist.neon", "phpunit.xml", ".gitignore"]
     }
 }
