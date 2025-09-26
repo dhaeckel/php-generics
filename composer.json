@@ -1,0 +1,52 @@
+{
+    "name": "haeckel/generics",
+    "description": "Support for generic classes",
+    "type": "library",
+    "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.3",
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "license": "LGPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "Haeckel\\Generics\\": "src/",
+            "Haeckel\\Generics\\Test\\": "test/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Dominik Häckel",
+            "homepage": "https://github.com/dhaeckel"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": "^8.1"
+    },
+    "scripts": {
+        "test": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit"
+        ],
+         "testSilent": [
+            "@putenv XDEBUG_MODE=coverage",
+            "vendor/bin/phpunit --no-output 2> /dev/null"
+        ],
+        "phpstan": [
+            "vendor/bin/phpstan"
+        ],
+        "cs": [
+            "vendor/bin/phpcs src/"
+        ],
+        "cbf": [
+            "vendor/bin/phpcbf src/"
+        ],
+        "ci": [
+            "@cbf",
+            "@cs",
+            "@phpstan -q",
+            "@testSilent"
+        ]
+    }
+}
