@@ -22,7 +22,8 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": "^8.1"
+        "php": "^8.1",
+        "haeckel/exception": "^1.0"
     },
     "scripts": {
         "test": [

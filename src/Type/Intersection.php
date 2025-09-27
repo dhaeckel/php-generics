@@ -3,6 +3,7 @@
 /**
  * @copyright 2025 Dominik Häckel
  * @license LGPL-3.0-or-later
+ *
  * This file is part of haeckel/php-generics.
  *
  * haeckel/php-generics is free software:

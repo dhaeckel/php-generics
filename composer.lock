@@ -4,8 +4,54 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00325dfd8ee430555db9c2d9f9544ca7",
-    "packages": [],
+    "content-hash": "8873539776afc498a9e0751218417416",
+    "packages": [
+        {
+            "name": "haeckel/exception",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dhaeckel/php-exception.git",
+                "reference": "f2753209937bf5ec1558b0246bd47817507223c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dhaeckel/php-exception/zipball/f2753209937bf5ec1558b0246bd47817507223c2",
+                "reference": "f2753209937bf5ec1558b0246bd47817507223c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "phpstan/phpstan": "^2.1",
+                "phpunit/phpunit": "^12.3",
+                "squizlabs/php_codesniffer": "^4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Haeckel\\Exc\\": "src/",
+                    "Haeckel\\Exc\\Test\\": "test/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Dominik Häckel"
+                }
+            ],
+            "description": "library that provides utilities and extensions for exceptions.",
+            "support": {
+                "issues": "https://github.com/dhaeckel/php-exception/issues",
+                "source": "https://github.com/dhaeckel/php-exception/tree/1.0.0"
+            },
+            "time": "2025-09-27T20:56:48+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "myclabs/deep-copy",
