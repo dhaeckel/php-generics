@@ -1,6 +1,4 @@
 /vendor/
-.phpunit.*
-cov.xml
 .vscode
 .cache
 .phpunit*

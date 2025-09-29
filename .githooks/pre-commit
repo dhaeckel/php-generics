@@ -1,0 +1,11 @@
+#! /bin/sh
+
+exitCode=0;
+# If there are whitespace errors, print the offending file names and fail.
+if ! git diff --check --staged; then
+    exitCode=1;
+fi;
+
+composer local-ci
+
+exit $exitCode;
