@@ -1,3 +1,10 @@
+[![codecov](https://codecov.io/gh/dhaeckel/php-generics/graph/badge.svg?token=QNQYC2O80B)](https://codecov.io/gh/dhaeckel/php-generics)
+[![ci](https://github.com/dhaeckel/php-generics/actions/workflows/php.yml/badge.svg)](https://github.com/dhaeckel/php-generics/actions/workflows/php.yml)
+[![Static Badge](https://img.shields.io/badge/PHPStan-level%20max-brightgreen)
+](https://phpstan.org/user-guide/rule-levels)
+[![Static Badge](https://img.shields.io/badge/PHPStan-strict_rules-brightgreen)](https://phpstan.org/user-guide/rule-levels#want-to-go-further%3F)
+![Packagist License](https://img.shields.io/packagist/l/haeckel/generics)
+
 # haeckel/php-generics
 
 haeckel/generics is a php Library for dealing with generic data structures.
