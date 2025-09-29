@@ -25,35 +25,18 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics\Test\TestType;
 
-use Haeckel\Generics\{Collection, Type};
+use Haeckel\Generics\{BaseCollection, Type};
 
-/** @extends Collection<Foo> */
-class FooCollection extends Collection
+/** @extends BaseCollection<Foo> */
+class FooCollection extends BaseCollection
 {
-    public function __construct(Foo ...$test)
+    public static function getElementType(): Type\ClassLike
     {
-        parent::__construct($test);
-    }
-
-    /** @param Foo ...$elements */
-    public function add(mixed ...$elements): void
-    {
-        $this->addGeneric(...$elements);
-    }
-
-    /** @param Foo ...$elements */
-    public function remove(mixed ...$elements): void
-    {
-        $this->removeGeneric(...$elements);
+        return new Type\ClassLike(Foo::class);
     }
 
     public function current(): Foo
     {
-        return $this->currentGeneric();
-    }
-
-    public static function getElementType(): Type\ClassLike
-    {
-        return new Type\ClassLike(Foo::class);
+        return parent::current();
     }
 }

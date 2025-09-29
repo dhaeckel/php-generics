@@ -25,123 +25,47 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics;
 
-use Haeckel\Exc;
+use Haeckel\Generics\Filter\ValueFilter;
 
 /**
- * @template V
- * @implements CollectionIface<V>
+ * @template TValue
+ * @extends \Iterator<int,TValue>
  */
-abstract class Collection implements CollectionIface
+interface Collection extends \Countable, \Iterator, \JsonSerializable
 {
-    /** @var array<int,V> */
-    private array $collection;
-
-    /** @param array<int,V> $collection */
-    protected function __construct(array $collection)
-    {
-        $this->collection = $collection;
-    }
-
-    abstract public static function getElementType(): Type\Definition;
-
-    // #region Iterator
-    /** @return V|false */
-    protected function currentGeneric(): mixed
-    {
-        return \current($this->collection);
-    }
-
-    public function next(): void
-    {
-        \next($this->collection);
-    }
-
-    public function key(): ?int
-    {
-        return \key($this->collection);
-    }
-
-    public function valid(): bool
-    {
-        return \current($this->collection) !== false;
-    }
-
-    public function rewind(): void
-    {
-        \reset($this->collection);
-    }
-    // #endregion
-
-    public function count(): int
-    {
-        return \count($this->collection);
-    }
-
-    /** @return array<int,V> */
-    public function jsonSerialize(): array
-    {
-        return $this->collection;
-    }
-
-    public function clear(): void
-    {
-        $this->collection = [];
-        \reset($this->collection);
-    }
-
-    public function isEmpty(): bool
-    {
-        return $this->count() === 0;
-    }
-
-    /** @return array<int,V> */
-    public function toArray(): array
-    {
-        return $this->collection;
-    }
-
-    /** @param V $elements */
-    protected function addGeneric(mixed ...$elements): void
-    {
-        foreach ($elements as $key => $element) {
-            if (! static::getElementType()->isOfType($element)) {
-                throw new \InvalidArgumentException(
-                    Exc\Util\MsgProvider::createTypeErrMsg(
-                        ((int) $key) + 1,
-                        static::getElementType()->getTypeName(),
-                        \get_debug_type($element),
-                    )
-                );
-            }
-            $this->collection[] = $element;
-        }
-    }
+    /**
+     * @no-named-arguments
+     * @param TValue $elements
+     */
+    public function add(mixed ...$elements): void;
 
     /**
      * @no-named-arguments
-     * @param V $elements
+     * @param TValue $elements
      */
-    protected function removeGeneric(mixed ...$elements): void
-    {
-        foreach ($elements as $key => $elem) {
-            if (! static::getElementType()->isOfType($elem)) {
-                throw new \InvalidArgumentException(
-                    Exc\Util\MsgProvider::createTypeErrMsg(
-                        ++$key,
-                        'elements',
-                        static::getElementType()->getTypeName(),
-                        \get_debug_type($elem),
-                    )
-                );
-            }
+    public function remove(mixed ...$elements): void;
 
-            $strict = ! \is_object($elem);
-            foreach ($this->collection as $key => $collectionElem) {
-                $found = $strict ? $elem === $collectionElem : $elem == $collectionElem;
-                if ($found) {
-                    unset($this->collection[$key]);
-                }
-            }
-        }
-    }
+    /** @return array<int,TValue> */
+    public function toArray(): array;
+
+    public function isEmpty(): bool;
+
+    public function clear(): void;
+
+    /**
+     * find elements matching a filter
+     *
+     * @param ValueFilter<TValue> $filter
+     */
+    public function find(ValueFilter $filter): static;
+
+    /**
+     * @param ValueFilter<TValue> $filter
+     *
+     * @return TValue
+     */
+    public function findFirst(ValueFilter $filter): mixed;
+
+    /** @param ValueFilter<TValue> $filter */
+    public function removeIf(ValueFilter $filter): void;
 }

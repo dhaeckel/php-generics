@@ -25,34 +25,18 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics\Test\TestType;
 
-use Haeckel\Generics\{Collection, Type};
+use Haeckel\Generics\{BaseCollection, Type};
 
-class IntCollection extends Collection
+/** @extends BaseCollection<int> */
+class IntCollection extends BaseCollection
 {
-    public function __construct(int ...$elements)
-    {
-        parent::__construct($elements);
-    }
-
     public static function getElementType(): Type\Definition
     {
         return Type\Builtin::Int;
     }
 
-    /** @var int ...$elements */
-    public function add(mixed ...$elements): void
-    {
-        $this->addGeneric(...$elements);
-    }
-
-    /** @param int ...$elements */
-    public function remove(mixed ...$elements): void
-    {
-        $this->removeGeneric(...$elements);
-    }
-
     public function current(): int
     {
-        return $this->currentGeneric();
+        return parent::current();
     }
 }

@@ -3,4 +3,4 @@
 cov.xml
 .vscode
 .cache
-doc/phpunit*
+.phpunit*

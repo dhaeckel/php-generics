@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.4/phpunit.xsd"
 	bootstrap="vendor/autoload.php"
-	cacheDirectory=".cache/phpunit"
+	cacheDirectory=".phpunit/cache"
 	executionOrder="depends,defects"
 	requireCoverageMetadata="true"
 	beStrictAboutCoverageMetadata="true"
@@ -26,8 +26,7 @@
 	</source>
 	<coverage pathCoverage="true">
 		<report>
-			<clover outputFile="cov.xml" />
-			<html outputDirectory="doc/phpunit-html-coverage" />
+			<clover outputFile=".phpunit/cov.xml" />
 		</report>
 	</coverage>
 </phpunit>

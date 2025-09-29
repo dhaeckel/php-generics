@@ -2,33 +2,43 @@
     "name": "haeckel/generics",
     "description": "Support for generic classes",
     "type": "library",
-    "require-dev": {
-        "phpstan/phpstan": "^2.1",
-        "phpunit/phpunit": "^12.3",
-        "squizlabs/php_codesniffer": "^4.0"
-    },
     "license": "LGPL-3.0-or-later",
-    "autoload": {
-        "psr-4": {
-            "Haeckel\\Generics\\": "src/",
-            "Haeckel\\Generics\\Test\\": "test/"
-        }
-    },
     "authors": [
         {
             "name": "Dominik Häckel",
             "homepage": "https://github.com/dhaeckel"
         }
     ],
-    "minimum-stability": "stable",
     "require": {
         "php": "^8.1",
         "haeckel/exception": "^1.0"
+    },
+    "require-dev": {
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.3",
+        "squizlabs/php_codesniffer": "^4.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Haeckel\\Generics\\": "src/",
+            "Haeckel\\Generics\\Test\\": "test/"
+        }
+    },
+    "config": {
+        "sort-packages": true,
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     },
     "scripts": {
         "test": [
             "@putenv XDEBUG_MODE=coverage",
             "vendor/bin/phpunit"
+        ],
+        "test-local": [
+            "@test --coverage-html .phpunit/html-coverage"
         ],
          "testSilent": [
             "@putenv XDEBUG_MODE=coverage",
@@ -36,6 +46,9 @@
         ],
         "phpstan": [
             "vendor/bin/phpstan"
+        ],
+        "ps": [
+            "@phpstan"
         ],
         "cs": [
             "vendor/bin/phpcs src/"
@@ -48,6 +61,12 @@
             "@cs",
             "@phpstan -q",
             "@testSilent"
+        ],
+        "local-ci": [
+            "@cbf",
+            "@cs",
+            "@phpstan --no-progress",
+            "@test --coverage-html .phpunit/html-coverage"
         ]
     },
     "archive": {

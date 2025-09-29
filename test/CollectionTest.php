@@ -25,17 +25,23 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics\Test;
 
+use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\{
-    Collection,
+    BaseCollection,
     Type,
     Util\InvArgExHelper,
 };
+use Haeckel\Generics\Filter\ValueFilter;
 use Haeckel\Generics\Test\TestType\{
     Bar,
     Foo,
     FooCollection,
     IntCollection,
 };
+use Haeckel\Generics\Type\Builtin;
+use Haeckel\Generics\Type\ClassLike;
+use Haeckel\Generics\Type\Definition;
+use OutOfRangeException;
 use PHPUnit\Framework\{
     Attributes\Small,
     Attributes\CoversClass,
@@ -44,15 +50,24 @@ use PHPUnit\Framework\{
 };
 
 #[Small]
-#[CoversClass(Collection::class)]
+#[CoversClass(BaseCollection::class)]
 #[UsesClass(Type\ClassLike::class)]
 #[UsesClass(Type\Builtin::class)]
 class CollectionTest extends TestCase
 {
-    public function testAcceptsType(): void
+    public function testAcceptsAssignedType(): void
     {
         $this->expectNotToPerformAssertions();
         new FooCollection(new Foo(), new Foo(), new Foo());
+    }
+
+    public function testRejectsInvalidType(): void
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            'Argument #2 must be of type ' . Foo::class . ', ' . Bar::class . ' given',
+        );
+        new FooCollection(new Foo(), new Bar(), new Foo());
     }
 
     public function testIteration(): void
@@ -64,15 +79,52 @@ class CollectionTest extends TestCase
         }
     }
 
+    public function testForeachOnEmptyCollection(): void
+    {
+        $this->expectNotToPerformAssertions();
+        $collection = new FooCollection();
+        foreach ($collection as $key => $elem) {
+        }
+    }
+
+    public function testThrowOnCurrenWhenEmptyCollection(): void
+    {
+        $this->expectException(\OutOfRangeException::class);
+        $collection = new FooCollection();
+        $collection->current();
+    }
+
+    public function testThrowOnCurrentWhenPointerBeyondElements(): void
+    {
+        $collection = new FooCollection(new Foo());
+        $collection->next();
+        $collection->next();
+        $this->expectException(\OutOfRangeException::class);
+        $collection->current();
+    }
+
+    public function testThrowOnKeyCallWhenEmptyCollection(): void
+    {
+        $this->expectException(\OutOfRangeException::class);
+        $collection = new FooCollection();
+        $collection->key();
+    }
+
     public function testAdd(): void
     {
         $collection = new FooCollection();
-        $collection->add(new Foo());
+        $collection->add(new Foo('b'));
+        $this->assertEquals([new Foo('b')], $collection->toArray());
+    }
+
+    public function testAddWithInvalidValue(): void
+    {
+        $collection = new FooCollection();
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage(
-            'Argument #1 must be of type ' . Foo::class . ', ' . Bar::class . ' given',
+            'Argument #2 must be of type ' . Foo::class . ', ' . Bar::class . ' given',
         );
-        $collection->add(new Bar());
+        $collection->add(new Foo(), new Bar('b'), 1);
     }
 
     public function testRemove(): void
@@ -145,5 +197,122 @@ class CollectionTest extends TestCase
         $this->assertEquals(false, $coll->isEmpty());
         $coll->clear();
         $this->assertEquals(true, $coll->isEmpty());
+    }
+
+    public function testFind(): void
+    {
+        $coll = new FooCollection(new Foo('a'), new Foo('b'), new Foo('c'), new Foo('b'));
+        $filter = new class implements ValueFilter {
+            private ClassLike $type;
+            private Foo $target;
+
+            public function __construct()
+            {
+                $this->type = new ClassLike(Foo::class);
+                $this->target = new Foo('b');
+            }
+
+            /** @param Foo $val */
+            public function __invoke(mixed $val): bool
+            {
+                if (! $this->type->isOfType($val)) {
+                    throw new \InvalidArgumentException(
+                        MsgProvider::createTypeErrMsg(1, Foo::class, \get_debug_type($val), '$val'),
+                    );
+                }
+
+                return $val->val === $this->target->val;
+            }
+        };
+        $found = $coll->find($filter);
+
+        $this->assertEquals([new Foo('b'), new Foo('b')], $found->toArray());
+    }
+
+    public function testFindFirst(): void
+    {
+        $coll = new FooCollection(new Foo('a'), new Foo('b'), new Foo('c'), new Foo('b'));
+        $filter = new class implements ValueFilter {
+            private ClassLike $type;
+            private Foo $target;
+
+            public function __construct()
+            {
+                $this->type = new ClassLike(Foo::class);
+                $this->target = new Foo('b');
+            }
+
+            /** @param Foo $val */
+            public function __invoke(mixed $val): bool
+            {
+                if (! $this->type->isOfType($val)) {
+                    throw new \InvalidArgumentException(
+                        MsgProvider::createTypeErrMsg(1, Foo::class, \get_debug_type($val), '$val'),
+                    );
+                }
+
+                return $val->val === $this->target->val;
+            }
+        };
+        $found = $coll->findFirst($filter);
+
+        $this->assertEquals(new Foo('b'), $found);
+    }
+
+    public function testFindFirstNoMatches(): void
+    {
+        $coll = new IntCollection(1, 2, 3, 4, 5);
+        $filter = /** @implements ValueFilter<int> */ new class implements ValueFilter {
+            private Builtin $type;
+
+            public function __construct()
+            {
+                $this->type = Builtin::Int;
+            }
+
+            /** @param int $val */
+            public function __invoke(mixed $val): bool
+            {
+                if (! $this->type->isOfType($val)) {
+                    throw new \InvalidArgumentException(
+                        MsgProvider::createTypeErrMsg(1, Foo::class, \get_debug_type($val), '$val'),
+                    );
+                }
+
+                return $val === 6;
+            }
+        };
+        $found = $coll->findFirst($filter);
+
+        $this->assertEquals(null, $found);
+    }
+
+    public function testRemoveIf(): void
+    {
+        $coll = new IntCollection(1, 2, 3, 4, 5);
+        $filter = /** @implements ValueFilter<int> */ new class implements ValueFilter {
+            private Builtin $type;
+
+            public function __construct()
+            {
+                $this->type = Builtin::Int;
+            }
+
+            /** @param int $val */
+            public function __invoke(mixed $val): bool
+            {
+                if (! $this->type->isOfType($val)) {
+                    throw new \InvalidArgumentException(
+                        MsgProvider::createTypeErrMsg(1, Foo::class, \get_debug_type($val), '$val'),
+                    );
+                }
+
+                return $val === 3 || $val === 5;
+            }
+        };
+        $coll->removeIf($filter);
+
+        // keys are not preserved
+        $this->assertEquals([0 => 1, 1 => 2, 3 => 4,], $coll->toArray());
     }
 }
