@@ -10,24 +10,24 @@ Uses PHPStan's generic syntax for type documentation and static analysis.
     All type classes can be used to type check at runtime and you can get a string representation
     that matches the native php notation.
 - [Filters](src/Filter) the filter interfaces enforce callable signatures, by specifying the
-    __invoke method signature. These are used to filter generic data structures
+    __invoke() method signature. These are used to filter generic data structures
     (e.g. find a subset of a collection) or to remove specific elements.
 - [Struct](src/Struct/) contains standard data structures that support generic usage.
     There is always an interface and an abstract base class for these structures.
 
 ## PHPStan
-This project uses the max level of phpstan and the phpstan/phpstan-strict-rules to ensure the
-programming follows a good standard. Here are the places, where @phpstan-ignore is used to step
-around a check (cf. unsafe mode in rust or go, where you can opt out of compiler guarantees).
+This project uses the max level of [PHPStan](https://phpstan.org/) and
+[phpstan/phpstan-strict-rules](https://github.com/phpstan/phpstan-strict-rules)
+to ensure the code follows a good standard.
+Here are the places, where @phpstan-ignore is used to step around a check
+(cf. unsafe mode in rust or go, where you can opt out of compiler guarantees).
 
 - [equal.notAllowed (necessary for object cmp)](src/Struct/BaseCollection.php) in method remove()
 
 ## Installation
 
-// packagist
-
-```bash
-pip install foobar
+```sh
+composer require haeckel/generics
 ```
 
 ## Usage
