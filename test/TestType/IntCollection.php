@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics\Test\TestType;
 
-use Haeckel\Generics\{BaseCollection, Type};
+use Haeckel\Generics\{Struct\BaseCollection, Type};
 
 /** @extends BaseCollection<int> */
 class IntCollection extends BaseCollection

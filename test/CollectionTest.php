@@ -27,9 +27,8 @@ namespace Haeckel\Generics\Test;
 
 use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\{
-    BaseCollection,
+    Struct\BaseCollection,
     Type,
-    Util\InvArgExHelper,
 };
 use Haeckel\Generics\Filter\ValueFilter;
 use Haeckel\Generics\Test\TestType\{
@@ -38,9 +37,6 @@ use Haeckel\Generics\Test\TestType\{
     FooCollection,
     IntCollection,
 };
-use Haeckel\Generics\Type\Builtin;
-use Haeckel\Generics\Type\ClassLike;
-use Haeckel\Generics\Type\Definition;
 use OutOfRangeException;
 use PHPUnit\Framework\{
     Attributes\Small,
@@ -203,12 +199,12 @@ class CollectionTest extends TestCase
     {
         $coll = new FooCollection(new Foo('a'), new Foo('b'), new Foo('c'), new Foo('b'));
         $filter = new class implements ValueFilter {
-            private ClassLike $type;
+            private Type\ClassLike $type;
             private Foo $target;
 
             public function __construct()
             {
-                $this->type = new ClassLike(Foo::class);
+                $this->type = new Type\ClassLike(Foo::class);
                 $this->target = new Foo('b');
             }
 
@@ -233,12 +229,12 @@ class CollectionTest extends TestCase
     {
         $coll = new FooCollection(new Foo('a'), new Foo('b'), new Foo('c'), new Foo('b'));
         $filter = new class implements ValueFilter {
-            private ClassLike $type;
+            private Type\ClassLike $type;
             private Foo $target;
 
             public function __construct()
             {
-                $this->type = new ClassLike(Foo::class);
+                $this->type = new Type\ClassLike(Foo::class);
                 $this->target = new Foo('b');
             }
 
@@ -263,11 +259,11 @@ class CollectionTest extends TestCase
     {
         $coll = new IntCollection(1, 2, 3, 4, 5);
         $filter = /** @implements ValueFilter<int> */ new class implements ValueFilter {
-            private Builtin $type;
+            private Type\Builtin $type;
 
             public function __construct()
             {
-                $this->type = Builtin::Int;
+                $this->type = Type\Builtin::Int;
             }
 
             /** @param int $val */
@@ -291,11 +287,11 @@ class CollectionTest extends TestCase
     {
         $coll = new IntCollection(1, 2, 3, 4, 5);
         $filter = /** @implements ValueFilter<int> */ new class implements ValueFilter {
-            private Builtin $type;
+            private Type\Builtin $type;
 
             public function __construct()
             {
-                $this->type = Builtin::Int;
+                $this->type = Type\Builtin::Int;
             }
 
             /** @param int $val */

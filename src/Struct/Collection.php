@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace Haeckel\Generics;
+namespace Haeckel\Generics\Struct;
 
 use Haeckel\Generics\Filter\ValueFilter;
 

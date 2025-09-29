@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace Haeckel\Generics;
+namespace Haeckel\Generics\Struct;
 
 use Haeckel\Exc;
 use Haeckel\Exc\Util\MsgProvider;
@@ -178,10 +178,7 @@ abstract class BaseCollection implements Collection
 
             $strict = ! \is_object($elem);
             foreach ($this->collection as $collectionKey => $collectionElem) {
-                /**
-                 * @unsafe
-                 * @phpstan-ignore equal.notAllowed (necessary for object cmp)
-                 */
+                // @phpstan-ignore equal.notAllowed (necessary for object cmp)
                 $found = $strict ? $elem === $collectionElem : $elem == $collectionElem;
                 if ($found) {
                     unset($this->collection[$collectionKey]);
