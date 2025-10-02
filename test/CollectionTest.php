@@ -27,7 +27,7 @@ namespace Haeckel\Generics\Test;
 
 use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\{
-    Struct\BaseCollection,
+    Struct\Collection,
     Type,
 };
 use Haeckel\Generics\Filter\ValueFilter;
@@ -46,7 +46,7 @@ use PHPUnit\Framework\{
 };
 
 #[Small]
-#[CoversClass(BaseCollection::class)]
+#[CoversClass(Collection\Base::class)]
 #[UsesClass(Type\ClassLike::class)]
 #[UsesClass(Type\Builtin::class)]
 class CollectionTest extends TestCase

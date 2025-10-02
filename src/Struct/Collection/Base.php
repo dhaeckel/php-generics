@@ -23,18 +23,19 @@
 
 declare(strict_types=1);
 
-namespace Haeckel\Generics\Struct;
+namespace Haeckel\Generics\Struct\Collection;
 
 use Haeckel\Exc;
 use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\Filter\ValueFilter;
+use Haeckel\Generics\Struct\Collection;
 use Haeckel\Generics\Type;
 
 /**
  * @template TValue
  * @implements Collection<TValue>
  */
-abstract class BaseCollection implements Collection
+abstract class Base implements Collection
 {
     /** @var array<int,TValue> */
     private array $collection;

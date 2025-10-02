@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace Haeckel\Generics\Test\TestType;
 
-use Haeckel\Generics\{Struct\BaseCollection, Type};
+use Haeckel\Generics\{Struct\Collection, Type};
 
-/** @extends BaseCollection<int> */
-class IntCollection extends BaseCollection
+/** @extends Collection\Base<int> */
+class IntCollection extends Collection\Base
 {
     public static function getElementType(): Type\Definition
     {
