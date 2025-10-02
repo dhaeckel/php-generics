@@ -146,7 +146,10 @@ final class BuiltinTest extends TestCase
 
     public function testIterableValidation(): void
     {
-        $arr = ['1', [], [1], new \ArrayObject(), null];
+        $gen = function (): \Generator {
+            yield 1;
+        };
+        $arr = ['1', [], [1], $gen, null];
         $type = Type\Builtin::Iterable;
 
         foreach ($arr as $val) {
