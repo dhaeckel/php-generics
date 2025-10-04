@@ -23,7 +23,7 @@
 
 declare(strict_types=1);
 
-namespace Haeckel\Generics\Test;
+namespace Haeckel\Generics\Test\Struct;
 
 use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\{
