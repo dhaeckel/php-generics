@@ -34,14 +34,20 @@ use Haeckel\Generics\Filter\ValueFilter;
 interface Collection extends \Countable, \Iterator, \JsonSerializable
 {
     /**
-     * @no-named-arguments
      * @param TValue $elements
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @no-named-arguments
      */
     public function add(mixed ...$elements): void;
 
     /**
-     * @no-named-arguments
      * @param TValue $elements
+     *
+     * @throws \InvalidArgumentException
+     *
+     * @no-named-arguments
      */
     public function remove(mixed ...$elements): void;
 

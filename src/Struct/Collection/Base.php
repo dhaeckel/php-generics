@@ -26,10 +26,7 @@ declare(strict_types=1);
 namespace Haeckel\Generics\Struct\Collection;
 
 use Haeckel\Exc;
-use Haeckel\Exc\Util\MsgProvider;
-use Haeckel\Generics\Filter\ValueFilter;
-use Haeckel\Generics\Struct\Collection;
-use Haeckel\Generics\Type;
+use Haeckel\Generics\{Filter\ValueFilter, Struct\Collection, Type};
 
 /**
  * @template TValue
@@ -52,15 +49,7 @@ abstract class Base implements Collection
     {
         $this->type = static::getElementType();
         foreach ($elements as $key => $elem) {
-            if (! $this->type->isOfType($elem)) {
-                throw new \InvalidArgumentException(
-                    MsgProvider::createTypeErrMsg(
-                        ++$key,
-                        $this->type->getTypeName(),
-                        \get_debug_type($elem),
-                    ),
-                );
-            }
+            $this->guardAgainstInvalidValue($elem, ++$key);
         }
         $this->collection = $elements;
     }
@@ -137,46 +126,23 @@ abstract class Base implements Collection
         return $this->count() === 0;
     }
 
-    /** @return array<int,TValue> */
     public function toArray(): array
     {
         return $this->collection;
     }
 
-    /** @param TValue $elements */
     public function add(mixed ...$elements): void
     {
         foreach ($elements as $key => $element) {
-            if (! $this->type->isOfType($element)) {
-                throw new \InvalidArgumentException(
-                    Exc\Util\MsgProvider::createTypeErrMsg(
-                        ++$key,
-                        $this->type->getTypeName(),
-                        \get_debug_type($element),
-                    )
-                );
-            }
+            $this->guardAgainstInvalidValue($element, ++$key);
             $this->collection[] = $element;
         }
     }
 
-    /**
-     * @no-named-arguments
-     * @param TValue $elements
-     */
     public function remove(mixed ...$elements): void
     {
         foreach ($elements as $key => $elem) {
-            if (! $this->type->isOfType($elem)) {
-                throw new \InvalidArgumentException(
-                    Exc\Util\MsgProvider::createTypeErrMsg(
-                        ++$key,
-                        $this->type->getTypeName(),
-                        \get_debug_type($elem),
-                    )
-                );
-            }
-
+            $this->guardAgainstInvalidValue($elem, ++$key);
             $strict = ! \is_object($elem);
             foreach ($this->collection as $collectionKey => $collectionElem) {
                 // @phpstan-ignore equal.notAllowed (necessary for object cmp)
@@ -222,6 +188,24 @@ abstract class Base implements Collection
             if ($filter($element)) {
                 unset($this->collection[$key]);
             }
+        }
+    }
+
+    /** @throws \InvalidArgumentException */
+    private function guardAgainstInvalidValue(
+        mixed $elem,
+        int $paramPos,
+        ?string $paramName = null,
+    ): void {
+        if (! $this->type->isOfType($elem)) {
+            throw new \InvalidArgumentException(
+                Exc\Util\MsgProvider::createTypeErrMsg(
+                    $paramPos,
+                    $this->type->getTypeName(),
+                    \get_debug_type($elem),
+                    $paramName,
+                )
+            );
         }
     }
 }
