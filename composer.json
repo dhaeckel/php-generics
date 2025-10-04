@@ -22,7 +22,11 @@
     },
     "autoload": {
         "psr-4": {
-            "Haeckel\\Generics\\": "src/",
+            "Haeckel\\Generics\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
             "Haeckel\\Generics\\Test\\": "test/"
         }
     },
