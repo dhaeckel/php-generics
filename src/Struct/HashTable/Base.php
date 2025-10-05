@@ -29,16 +29,16 @@ use Haeckel\Exc\Util\MsgProvider;
 use Haeckel\Generics\{
     Cmp,
     Hashable,
-    Struct\HashTable,
+    Struct\Map,
     Type,
 };
 
 /**
  * @template TKey of string|\Stringable|Hashable
  * @template TValue
- * @implements HashTable<TKey,TValue>
+ * @implements Map<TKey,TValue>
  */
-abstract class Base implements HashTable
+abstract class Base implements Map
 {
     /** @var array<string,Entry<TKey,TValue>> */
     private array $hashTable;

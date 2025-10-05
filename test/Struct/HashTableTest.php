@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace Haeckel\Generics\Test\Struct;
 
 use Haeckel\Generics\{Cmp, Struct\HashTable, Type};
-use Haeckel\Generics\Struct\HashTable\Entry;
 use Haeckel\Generics\Test\{
     TestType\Customer,
     TestType\CustomerIdentity,
@@ -368,8 +367,8 @@ final class HashTableTest extends TestCase
 
         $this->assertEquals(
             [
-                $id1->getHash() => new Entry($id1, $customer1),
-                $id2->getHash() => new Entry($id2, $customer2),
+                $id1->getHash() => new HashTable\Entry($id1, $customer1),
+                $id2->getHash() => new HashTable\Entry($id2, $customer2),
             ],
             $map->toArrayPreserveEntries(),
         );

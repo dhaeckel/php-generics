@@ -26,18 +26,17 @@ declare(strict_types=1);
 namespace Haeckel\Generics\Test\TestType;
 
 use Haeckel\Generics\Struct\HashTable;
-use Haeckel\Generics\Type\ClassLike;
-use Haeckel\Generics\Type\Definition;
+use Haeckel\Generics\Type;
 
 final class CustomerMap extends HashTable\Base
 {
-    public static function getKeyType(): Definition
+    public static function getKeyType(): Type\Definition
     {
-        return new ClassLike(CustomerIdentity::class);
+        return new Type\ClassLike(CustomerIdentity::class);
     }
 
-    public static function getValueType(): Definition
+    public static function getValueType(): Type\Definition
     {
-        return new ClassLike(Customer::class);
+        return new Type\ClassLike(Customer::class);
     }
 }

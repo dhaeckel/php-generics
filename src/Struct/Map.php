@@ -33,7 +33,7 @@ use Haeckel\Generics\Hashable;
  * @template TValue
  * @extends \Iterator<TKey,TValue>
  */
-interface HashTable extends \Countable, \Iterator, \JsonSerializable
+interface Map extends \Countable, \Iterator, \JsonSerializable
 {
     /** remove all entries */
     public function clear(): void;
